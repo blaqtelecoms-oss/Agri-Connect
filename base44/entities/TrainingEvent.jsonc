@@ -1,0 +1,33 @@
+{
+  "name": "TrainingEvent",
+  "type": "object",
+  "properties": {
+    "topic": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "venue": {
+      "type": "string"
+    },
+    "capacity": {
+      "type": "number"
+    },
+    "attendees": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "completed"
+      ],
+      "default": "scheduled"
+    }
+  },
+  "required": [
+    "topic",
+    "date"
+  ]
+}

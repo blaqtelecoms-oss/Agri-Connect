@@ -1,0 +1,46 @@
+{
+  "name": "Visit",
+  "type": "object",
+  "properties": {
+    "farm_id": {
+      "type": "string"
+    },
+    "farmer_id": {
+      "type": "string"
+    },
+    "farmer_name": {
+      "type": "string"
+    },
+    "officer": {
+      "type": "string"
+    },
+    "officer_wards": {
+      "type": "string"
+    },
+    "ward": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "completed",
+        "missed"
+      ],
+      "default": "scheduled"
+    }
+  },
+  "required": [
+    "officer",
+    "date"
+  ]
+}

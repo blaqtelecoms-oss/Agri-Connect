@@ -1,0 +1,44 @@
+{
+  "name": "Permit",
+  "type": "object",
+  "properties": {
+    "number": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "farmer_id": {
+      "type": "string"
+    },
+    "farmer_name": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "issue_date": {
+      "type": "string"
+    },
+    "expiry_date": {
+      "type": "string"
+    },
+    "qr_token": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "revoked"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "number",
+    "type",
+    "farmer_id"
+  ]
+}

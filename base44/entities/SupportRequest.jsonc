@@ -1,0 +1,47 @@
+{
+  "name": "SupportRequest",
+  "type": "object",
+  "properties": {
+    "topic": {
+      "type": "string"
+    },
+    "urgency": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium"
+    },
+    "preferred_time": {
+      "type": "string"
+    },
+    "farmer_id": {
+      "type": "string"
+    },
+    "farmer_name": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string"
+    },
+    "assigned_officer": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "requested",
+        "assigned",
+        "scheduled",
+        "completed"
+      ],
+      "default": "requested"
+    }
+  },
+  "required": [
+    "topic",
+    "farmer_id"
+  ]
+}

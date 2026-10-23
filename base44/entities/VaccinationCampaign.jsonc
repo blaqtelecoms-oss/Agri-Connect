@@ -1,0 +1,33 @@
+{
+  "name": "VaccinationCampaign",
+  "type": "object",
+  "properties": {
+    "disease": {
+      "type": "string"
+    },
+    "target_group": {
+      "type": "string"
+    },
+    "doses_target": {
+      "type": "number"
+    },
+    "doses_administered": {
+      "type": "number"
+    },
+    "due_date": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "active",
+        "completed"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "disease"
+  ]
+}

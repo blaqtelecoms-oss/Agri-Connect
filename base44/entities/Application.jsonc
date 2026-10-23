@@ -1,0 +1,61 @@
+{
+  "name": "Application",
+  "type": "object",
+  "properties": {
+    "reference": {
+      "type": "string"
+    },
+    "service_type": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "farmer_id": {
+      "type": "string"
+    },
+    "farmer_name": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "in_review",
+        "more_info_required",
+        "approved",
+        "rejected",
+        "issued",
+        "escalated"
+      ],
+      "default": "submitted"
+    },
+    "submitted_data": {
+      "type": "string"
+    },
+    "assigned_officer": {
+      "type": "string"
+    },
+    "due_date": {
+      "type": "string"
+    },
+    "submitted_date": {
+      "type": "string"
+    },
+    "progress": {
+      "type": "number",
+      "default": 0
+    },
+    "review_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "reference",
+    "service_type",
+    "farmer_id"
+  ]
+}

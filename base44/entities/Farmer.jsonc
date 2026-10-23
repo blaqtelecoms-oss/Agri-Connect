@@ -1,0 +1,64 @@
+{
+  "name": "Farmer",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "id_number": {
+      "type": "string"
+    },
+    "reg_number": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "commercial",
+        "smallholder",
+        "agri-business",
+        "cooperative"
+      ],
+      "default": "smallholder"
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "verified",
+        "changes_requested",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "farmer_code": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string"
+    },
+    "ward": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "default": "English"
+    },
+    "profile_completeness": {
+      "type": "number",
+      "default": 0
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
