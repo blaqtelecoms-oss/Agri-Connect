@@ -1,0 +1,7 @@
+{
+  "name": "Agri-Connect",
+  "short_name": "Agri-Connect",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": []
+}
