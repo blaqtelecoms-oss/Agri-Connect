@@ -55,9 +55,10 @@ What needs the backend:
 - `src/pages/farmer/_shared.jsx` — list queries (farms, applications, service
   types, notifications, incidents) fall back to sample rows in
   `src/pages/farmer/_farmerSampleData.js` when the backend is unreachable.
-- `src/pages/farmer/Services.jsx` — `apply` records the submission in the local
-  sample fallback (`addSampleApplication`/`addSampleNotification`) when the
-  entity `create` fails, so the apply flow works end to end without a backend.
+- `src/pages/farmer/Services.jsx` + `ServiceApplyForm.jsx` — the 3-step apply
+  form records the submission in the local sample fallback
+  (`addSampleApplication`/`addSampleNotification`) when the entity `create`
+  fails, so the apply flow works end to end without a backend.
 - `src/pages/farmer/Report.jsx` — incident `create` has no `catch`, so without a
   backend a submit silently does nothing (no success screen, no visible error).
 

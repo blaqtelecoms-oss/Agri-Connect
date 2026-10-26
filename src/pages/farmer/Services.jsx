@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Search, FileText } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
-import { addSampleApplication, addSampleNotification } from './_farmerSampleData';
+import { Search, ArrowRight } from 'lucide-react';
 import { qrSvgFromToken } from '@/lib/agriAssets';
-import { FARMER_NAME, FARMER_ID, useServiceTypes, useFarmerApplications, Chip, FarmerCard, PageWrap, PageHeader, showToast, DCard, DSectionHead, DChip } from './_shared';
+import ServiceApplyForm, { CATEGORY_META } from './ServiceApplyForm';
+import { FARMER_NAME, FARMER_ID, useServiceTypes, useFarmerApplications, Chip, FarmerCard, PageWrap, PageHeader, DCard, DSectionHead, DChip } from './_shared';
 
 const CATS = ['All', 'Permits', 'Registrations', 'Grants', 'Certificates', 'Training'];
 const catKey = { Permits: 'permit', Registrations: 'registration', Grants: 'grant', Certificates: 'certificate', Training: 'training' };
@@ -21,7 +20,7 @@ export default function Services() {
   const { items: apps, reload } = useFarmerApplications();
   const [cat, setCat] = useState('All');
   const [query, setQuery] = useState('');
-  const [submitting, setSubmitting] = useState(null);
+  const [formService, setFormService] = useState(null);
 
   const filtered = services.filter(s => {
     const catOk = cat === 'All' || s.category === catKey[cat];
@@ -30,35 +29,6 @@ export default function Services() {
   });
 
   const inReviewApp = apps.find(a => a.status !== 'approved' && a.status !== 'issued' && a.status !== 'rejected') || apps[0];
-
-  const apply = async (s) => {
-    setSubmitting(s.id);
-    try {
-      const ref = 'APP-2026-' + String(Math.floor(4000 + Math.random() * 999)).padStart(4, '0');
-      const app = {
-        reference: ref, service_type: s.name, category: s.category, farmer_id: FARMER_ID, farmer_name: FARMER_NAME,
-        area: 'De Deur', status: 'submitted', assigned_officer: s.approver_role || 'Officer', due_date: '5 days',
-        submitted_date: new Date().toLocaleDateString('en-ZA', { day: '2-digit', month: 'short' }), progress: 5, submitted_data: 'Pre-filled from farm profile',
-      };
-      try {
-        await base44.entities.Application.create(app);
-        await base44.entities.NotificationItem.create({
-          farmer_id: FARMER_ID, title: 'Application submitted', body: `${s.name} (${ref}) is now in review. We will notify you of updates.`, type: 'action', channel: 'push',
-        });
-      } catch (e) {
-        // Backend unreachable (not configured): record the submission in the
-        // local sample fallback so the apply flow still works end to end.
-        addSampleApplication(app);
-        addSampleNotification({
-          farmer_id: FARMER_ID, title: 'Application submitted', body: `${s.name} (${ref}) is now in review. We will notify you of updates.`, type: 'action', channel: 'push',
-        });
-      }
-      showToast('Application submitted – ' + ref);
-      reload();
-    } finally {
-      setSubmitting(null);
-    }
-  };
 
   const qrToken = FARMER_ID + '-CERT';
 
@@ -79,16 +49,39 @@ export default function Services() {
                 style={cat === c ? { background: 'var(--ag-g)', borderColor: 'var(--ag-g)' } : { background: 'var(--ag-card, #fff)', borderColor: 'var(--ag-line)' }}>{c}</button>
             ))}
           </div>
-          <FarmerCard className="mt-2">
-            {filtered.length === 0 && <div className="py-6 text-center text-[13px]" style={{ color: 'var(--ag-mut)' }}>No services found.</div>}
-            {filtered.map((s) => (
-              <div key={s.id} className="flex items-center gap-3 py-3 border-b last:border-0" style={{ borderColor: 'var(--ag-line)' }}>
-                <span className="w-[42px] h-[42px] rounded-[14px] grid place-items-center flex-none" style={{ background: 'var(--ag-gl)', color: 'var(--ag-g)' }}><FileText className="w-5 h-5" /></span>
-                <div className="flex-1 min-w-0"><b className="block text-[13px] font-semibold" style={{ color: 'var(--ag-ink)' }}>{s.name}</b><span className="text-[12px]" style={{ color: 'var(--ag-mut)' }}>{s.category} · {s.approver_role} · {s.sla_days} days</span></div>
-                <button disabled={submitting === s.id} onClick={() => apply(s)} className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#d9f0e3] text-[#15693f] disabled:opacity-60">{submitting === s.id ? '…' : 'Apply'}</button>
-              </div>
-            ))}
-          </FarmerCard>
+          {filtered.length === 0 && <div className="py-8 text-center text-[13px]" style={{ color: 'var(--ag-mut)' }}>No services found.</div>}
+          <div className="mt-2 space-y-2.5">
+            {filtered.map((s) => {
+              const meta = CATEGORY_META[s.category] || CATEGORY_META.permit;
+              const I = meta.Icon;
+              return (
+                <div key={s.id} className="relative overflow-hidden rounded-[20px] border p-3.5 pl-4"
+                  style={{ background: 'var(--ag-card, #fff)', borderColor: 'var(--ag-line)', boxShadow: '0 3px 14px rgba(15,40,30,0.06)' }}>
+                  <span className="absolute left-0 top-0 bottom-0 w-[4px]" style={{ background: `linear-gradient(180deg, ${meta.from}, ${meta.to})` }} />
+                  <div className="flex items-start gap-3">
+                    <span className="w-[46px] h-[46px] rounded-[15px] grid place-items-center flex-none"
+                      style={{ background: `linear-gradient(135deg, ${meta.from}, ${meta.to})`, boxShadow: `0 5px 12px ${meta.to}40, inset 0 1px 0 rgba(255,255,255,0.35)` }}>
+                      <I className="w-[22px] h-[22px] text-white" strokeWidth={2.1} />
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <b className="text-[13.5px] font-semibold leading-tight" style={{ color: 'var(--ag-ink)' }}>{s.name}</b>
+                        <span className="text-[10px] font-bold px-2 py-[3px] rounded-full uppercase tracking-wide" style={{ background: 'var(--ag-gl)', color: 'var(--ag-g)' }}>{meta.label}</span>
+                      </div>
+                      <div className="text-[11.5px] mt-1" style={{ color: 'var(--ag-mut)' }}>{s.approver_role} · {s.sla_days}-day SLA</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between mt-3">
+                    <span className="text-[11px]" style={{ color: 'var(--ag-mut)' }}>Official municipal process</span>
+                    <button onClick={() => setFormService(s)} className="text-[12px] font-semibold px-4 py-2 rounded-full text-white flex items-center gap-1.5"
+                      style={{ background: 'linear-gradient(135deg, #2f8a66, #1d5c45)', boxShadow: '0 3px 10px rgba(29,92,69,0.3)' }}>
+                      Apply now<ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           <div className="grid grid-cols-1 gap-0">
             {inReviewApp && (
               <div>
@@ -141,15 +134,28 @@ export default function Services() {
 
         <div className="grid grid-cols-3 gap-4">
           {filtered.length === 0 && <div className="col-span-3 py-10 text-center text-[14px] font-jk" style={{ color: 'var(--ac-mu)' }}>No services found.</div>}
-          {filtered.map(s => (
-            <DCard key={s.id}>
-              <span className="w-10 h-10 rounded-[13px] grid place-items-center mb-3" style={{ background: 'var(--ac-gl)', color: 'var(--ac-g)' }}><FileText className="w-5 h-5" /></span>
-              <b className="block text-[14.5px] font-jk" style={{ color: 'var(--ac-ink)' }}>{s.name}</b>
-              <div className="text-[12px] font-jk my-1" style={{ color: 'var(--ac-mu)' }}>{s.category} · {s.approver_role} · {s.sla_days} days</div>
-              <button disabled={submitting === s.id} onClick={() => apply(s)} className="rounded-full px-4 py-2 text-[12px] font-semibold font-jk mt-2"
-                style={{ background: 'var(--ac-gl)', color: 'var(--ac-g)' }}>{submitting === s.id ? 'Submitting…' : 'Apply'}</button>
-            </DCard>
-          ))}
+          {filtered.map(s => {
+            const meta = CATEGORY_META[s.category] || CATEGORY_META.permit;
+            const I = meta.Icon;
+            return (
+              <DCard key={s.id} className="relative overflow-hidden">
+                <span className="absolute -right-9 -top-9 w-[110px] h-[110px] rounded-full opacity-[0.10]" style={{ background: meta.from }} />
+                <div className="flex items-start justify-between">
+                  <span className="w-[46px] h-[46px] rounded-[15px] grid place-items-center"
+                    style={{ background: `linear-gradient(135deg, ${meta.from}, ${meta.to})`, boxShadow: `0 6px 14px ${meta.to}40, inset 0 1px 0 rgba(255,255,255,0.35)` }}>
+                    <I className="w-[22px] h-[22px] text-white" strokeWidth={2.1} />
+                  </span>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide font-jk" style={{ background: 'var(--ac-gl)', color: 'var(--ac-g)' }}>{meta.label}</span>
+                </div>
+                <b className="block text-[14.5px] font-jk mt-3 leading-tight" style={{ color: 'var(--ac-ink)' }}>{s.name}</b>
+                <div className="text-[12px] font-jk my-1.5" style={{ color: 'var(--ac-mu)' }}>{s.approver_role} · {s.sla_days}-day SLA</div>
+                <button onClick={() => setFormService(s)} className="rounded-full px-4 py-2 text-[12px] font-semibold font-jk mt-2 w-full text-white flex items-center justify-center gap-1.5"
+                  style={{ background: 'linear-gradient(135deg, #2f8a66, #1d5c45)', boxShadow: '0 3px 10px rgba(29,92,69,0.25)' }}>
+                  Apply now<ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </DCard>
+            );
+          })}
         </div>
 
         <div className="grid mt-6" style={{ gridTemplateColumns: '1.65fr 1fr', gap: 20 }}>
@@ -190,6 +196,11 @@ export default function Services() {
           </DCard>
         </div>
       </div>
+
+      {/* Professional application flow for the selected service */}
+      {formService && (
+        <ServiceApplyForm service={formService} onClose={() => setFormService(null)} onSubmitted={reload} />
+      )}
     </>
   );
 }
