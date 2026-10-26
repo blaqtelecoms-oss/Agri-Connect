@@ -172,27 +172,19 @@ function Sidebar({ activeId, collapsed, setCollapsed, farmerName, farmerId, unre
   const go = (path) => navigate(path);
 
   return (
+    <div className="relative flex-none" style={{ margin: '14px 0 14px 14px', zIndex: 30 }}>
     <aside
-      className="hidden lg:flex flex-col flex-none relative overflow-y-auto ac-scr transition-[width] duration-300"
+      className="hidden lg:flex flex-col h-full relative overflow-y-auto ac-scr transition-[width] duration-300"
       style={{
         width: collapsed ? 96 : 276,
-        margin: '14px 0 14px 14px',
         borderRadius: 30,
         padding: collapsed ? '20px 12px' : '20px 14px',
         color: '#fff',
         background: 'radial-gradient(90% 40% at 15% 0%, #2fa77555, transparent 70%), radial-gradient(80% 40% at 100% 100%, #c9a24b33, transparent 70%), linear-gradient(170deg, #0f4533, #07241a)',
         boxShadow: '0 24px 60px #06241a55, inset 0 0 0 1px #ffffff14',
-        zIndex: 10,
       }}>
       {/* dotted texture */}
       <div className="pointer-events-none absolute inset-0 rounded-[30px]" style={{ backgroundImage: 'radial-gradient(#ffffff12 1px, transparent 1px)', backgroundSize: '16px 16px', maskImage: 'linear-gradient(#000, transparent 70%)', WebkitMaskImage: 'linear-gradient(#000, transparent 70%)' }} />
-
-      {/* collapse toggle */}
-      <button onClick={() => setCollapsed(c => !c)} aria-label="Collapse menu"
-        className="absolute right-[-14px] top-[38px] w-7 h-7 rounded-full grid place-items-center transition z-20"
-        style={{ background: '#fff', color: 'var(--ac-gd)', boxShadow: '0 6px 16px #0004' }}>
-        <ChevronLeft className="w-4 h-4 transition-transform" style={{ transform: collapsed ? 'rotate(180deg)' : 'none' }} />
-      </button>
 
       {/* brand */}
       <div className="relative flex items-center gap-3 px-1.5 mb-4" style={{ justifyContent: collapsed ? 'center' : 'flex-start' }}>
@@ -230,7 +222,7 @@ function Sidebar({ activeId, collapsed, setCollapsed, farmerName, farmerId, unre
           style={{ background: 'linear-gradient(135deg,#4fb98a,#1f7a57)', border: '2px solid #ffffff44' }}>
           {initials(farmerName)}
           <span className="absolute -bottom-0.5 -right-0.5 w-[11px] h-[11px] rounded-full" style={{ background: '#4be08f', border: '2px solid #0f4533' }} />
-          <span className="pointer-events-none absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition whitespace-nowrap rounded-[10px] px-3 py-1.5 text-[12px] font-jk z-30"
+          <span className="pointer-events-none absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 hidden group-hover:block whitespace-nowrap rounded-[10px] px-3 py-1.5 text-[12px] font-jk z-30"
             style={{ background: '#10211a', color: '#fff', boxShadow: '0 8px 20px #0004' }}>Profile</span>
         </button>
       )}
@@ -270,7 +262,7 @@ function Sidebar({ activeId, collapsed, setCollapsed, farmerName, farmerId, unre
               )}
               {on && !collapsed && <span className="absolute right-3.5 top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full" style={{ background: 'var(--ac-au)', boxShadow: '0 0 12px var(--ac-au)' }} />}
               {collapsed && (
-                <span className="pointer-events-none absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition whitespace-nowrap rounded-[10px] px-3 py-1.5 text-[12px] font-jk z-30"
+                <span className="pointer-events-none absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 hidden group-hover:block whitespace-nowrap rounded-[10px] px-3 py-1.5 text-[12px] font-jk z-30"
                   style={{ background: '#10211a', color: '#fff', boxShadow: '0 8px 20px #0004' }}>{n.label}</span>
               )}
             </button>
@@ -292,7 +284,7 @@ function Sidebar({ activeId, collapsed, setCollapsed, farmerName, farmerId, unre
           </span>
           {!collapsed && <span className="text-[13.5px] font-jk">Report a problem</span>}
           {collapsed && (
-            <span className="pointer-events-none absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 opacity-0 hover:opacity-100 group-hover:opacity-100 transition whitespace-nowrap rounded-[10px] px-3 py-1.5 text-[12px] font-jk z-30"
+            <span className="pointer-events-none absolute left-[calc(100%+14px)] top-1/2 -translate-y-1/2 hidden group-hover:block whitespace-nowrap rounded-[10px] px-3 py-1.5 text-[12px] font-jk z-30"
               style={{ background: '#10211a', color: '#fff', boxShadow: '0 8px 20px #0004' }}>Report a problem</span>
           )}
         </button>
@@ -329,5 +321,13 @@ function Sidebar({ activeId, collapsed, setCollapsed, farmerName, farmerId, unre
         {!collapsed && <span className="text-[13px] font-medium font-jk">Sign out</span>}
       </button>
     </aside>
+
+    {/* collapse toggle — kept outside the scrollable aside so it is never clipped */}
+    <button onClick={() => setCollapsed(c => !c)} aria-label="Collapse menu"
+      className="absolute right-[-14px] top-[38px] w-7 h-7 rounded-full grid place-items-center transition z-20"
+      style={{ background: '#fff', color: 'var(--ac-gd)', boxShadow: '0 6px 16px #0004' }}>
+      <ChevronLeft className="w-4 h-4 transition-transform" style={{ transform: collapsed ? 'rotate(180deg)' : 'none' }} />
+    </button>
+    </div>
   );
 }
