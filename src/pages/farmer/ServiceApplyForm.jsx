@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronLeft, Send, CircleCheckBig, ShieldCheck, BadgeCheck, Award, GraduationCap, ScrollText, Landmark, Phone } from 'lucide-react';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { base44 } from '@/api/base44Client';
 import { addSampleApplication, addSampleNotification } from './_farmerSampleData';
 import { FARMER_ID, FARMER_NAME, useFarmerFarms, showToast } from './_shared';
@@ -134,13 +136,17 @@ export default function ServiceApplyForm({ service, onClose, onSubmitted }) {
     ...meta.fields.map((f) => [f.label, values[f.id] || '—']),
   ];
 
-  return (
-    <div className="fixed inset-0 z-[70] flex items-end lg:items-center justify-center" style={{ background: 'rgba(8,18,14,0.55)', backdropFilter: 'blur(3px)' }}>
-      <div className="w-full lg:w-[540px] max-h-[92vh] overflow-y-auto rounded-t-[30px] lg:rounded-[28px]"
-        style={{ background: 'var(--ag-card, #fff)', boxShadow: '0 -12px 60px rgba(10,25,18,0.35)' }}>
+  // Portaled to <body> so the fixed overlay always anchors to the viewport:
+  // animated page wrappers (e.g. the desktop ac-rise content area) act as
+  // the containing block for fixed children and shift the dialog off-center.
+  const desktop = useMediaQuery('(min-width: 1024px)');
+  return createPortal(
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: 'rgba(8,18,14,0.55)', backdropFilter: 'blur(3px)' }}>
+      <div className={`w-full max-w-[540px] max-h-[92vh] overflow-y-auto rounded-[28px] ${desktop ? 'font-jk' : 'font-farmer'}`}
+        style={{ background: 'var(--ag-card, #fff)', boxShadow: '0 24px 70px rgba(10,25,18,0.35)' }}>
 
         {/* Premium gradient header with the category icon */}
-        <div className="relative p-5 pb-4 text-white overflow-hidden rounded-t-[30px] lg:rounded-t-[28px]"
+        <div className="relative p-5 pb-4 text-white overflow-hidden rounded-t-[28px]"
           style={{ background: `linear-gradient(135deg, ${meta.from}, ${meta.to})` }}>
           <span className="absolute -right-7 -top-9 w-32 h-32 rounded-full" style={{ background: 'rgba(255,255,255,0.14)' }} />
           <span className="absolute right-8 -bottom-10 w-24 h-24 rounded-full" style={{ background: 'rgba(255,255,255,0.10)' }} />
@@ -181,18 +187,18 @@ export default function ServiceApplyForm({ service, onClose, onSubmitted }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
                 <label className="block text-[12px] font-semibold mb-1.5" style={labelStyle}>Farm<span style={{ color: 'var(--ag-or)' }}> *</span></label>
-                <div className="flex items-center gap-2 border rounded-2xl py-2.5 px-3" style={inputStyle}>
+                <div className="flex items-center gap-2 border rounded-2xl py-2.5 px-3 min-w-0" style={inputStyle}>
                   <Landmark className="w-4 h-4 flex-none" style={{ color: 'var(--ag-mut)' }} />
-                  <select value={farmName} onChange={(e) => setFarm(e.target.value)} className="flex-1 bg-transparent text-[13.5px] outline-none" style={{ color: 'var(--ag-ink)' }}>
+                  <select value={farmName} onChange={(e) => setFarm(e.target.value)} className="flex-1 min-w-0 bg-transparent text-[13.5px] outline-none" style={{ color: 'var(--ag-ink)' }}>
                     {(farms.length ? farms : [{ name: 'De Deur Smallholding' }]).map((f) => <option key={f.id || f.name} value={f.name}>{f.name}</option>)}
                   </select>
                 </div>
               </div>
               <div>
                 <label className="block text-[12px] font-semibold mb-1.5" style={labelStyle}>Contact number<span style={{ color: 'var(--ag-or)' }}> *</span></label>
-                <div className="flex items-center gap-2 border rounded-2xl py-2.5 px-3" style={inputStyle}>
+                <div className="flex items-center gap-2 border rounded-2xl py-2.5 px-3 min-w-0" style={inputStyle}>
                   <Phone className="w-4 h-4 flex-none" style={{ color: 'var(--ag-mut)' }} />
-                  <input value={contact} onChange={(e) => setContact(e.target.value)} className="flex-1 bg-transparent text-[13.5px] outline-none" style={{ color: 'var(--ag-ink)' }} />
+                  <input value={contact} onChange={(e) => setContact(e.target.value)} className="flex-1 min-w-0 bg-transparent text-[13.5px] outline-none" style={{ color: 'var(--ag-ink)' }} />
                 </div>
               </div>
             </div>
@@ -264,6 +270,7 @@ export default function ServiceApplyForm({ service, onClose, onSubmitted }) {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

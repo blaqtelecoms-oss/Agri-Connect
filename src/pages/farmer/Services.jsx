@@ -2,18 +2,11 @@ import React, { useState } from 'react';
 import { Search, ArrowRight } from 'lucide-react';
 import { qrSvgFromToken } from '@/lib/agriAssets';
 import ServiceApplyForm, { CATEGORY_META } from './ServiceApplyForm';
-import { FARMER_NAME, FARMER_ID, useServiceTypes, useFarmerApplications, Chip, FarmerCard, PageWrap, PageHeader, DCard, DSectionHead, DChip } from './_shared';
+import ApplicationTracker from './ApplicationTracker';
+import { FARMER_NAME, FARMER_ID, useServiceTypes, useFarmerApplications, PageWrap, PageHeader, DCard, DSectionHead } from './_shared';
 
 const CATS = ['All', 'Permits', 'Registrations', 'Grants', 'Certificates', 'Training'];
 const catKey = { Permits: 'permit', Registrations: 'registration', Grants: 'grant', Certificates: 'certificate', Training: 'training' };
-
-function dChipVar(status) {
-  const s = String(status || '').toLowerCase();
-  if (/review|progress|open|needs|more/.test(s)) return 'c-y';
-  if (/approved|verified|complete|valid|issued/.test(s)) return 'c-g';
-  if (/reject|changes|breach|critical/.test(s)) return 'c-r';
-  return 'c-b';
-}
 
 export default function Services() {
   const { items: services } = useServiceTypes();
@@ -27,8 +20,6 @@ export default function Services() {
     const qOk = !query || s.name.toLowerCase().includes(query.toLowerCase());
     return catOk && qOk;
   });
-
-  const inReviewApp = apps.find(a => a.status !== 'approved' && a.status !== 'issued' && a.status !== 'rejected') || apps[0];
 
   const qrToken = FARMER_ID + '-CERT';
 
@@ -83,31 +74,12 @@ export default function Services() {
             })}
           </div>
           <div className="grid grid-cols-1 gap-0">
-            {inReviewApp && (
-              <div>
-                <h2 className="text-[17px] font-semibold mt-5">Track application</h2>
-                <FarmerCard className="mt-2">
-                  <div className="flex items-center justify-between">
-                    <div><b className="text-[13px] font-semibold" style={{ color: 'var(--ag-ink)' }}>{inReviewApp.service_type}</b><div className="text-[12px]" style={{ color: 'var(--ag-mut)' }}>{inReviewApp.reference} · Submitted {inReviewApp.submitted_date}</div></div>
-                    <Chip text={inReviewApp.status.replace(/_/g, ' ')} />
-                  </div>
-                  <div className="relative pl-6 mt-3">
-                    {[
-                      { t: 'Submitted', s: `${inReviewApp.submitted_date}`, done: true },
-                      { t: 'Vaccination & zone check passed', s: 'Auto-checked', done: true, cur: inReviewApp.status === 'in_review' },
-                      { t: 'Reviewed by ' + (inReviewApp.assigned_officer || 'Officer'), s: `Due by ${inReviewApp.due_date} (SLA)`, cur: inReviewApp.status === 'in_review' },
-                      { t: 'Permit issued with QR code', s: '', done: ['approved', 'issued'].includes(inReviewApp.status) },
-                    ].map((step, i, arr) => (
-                      <div key={i} className="relative pb-3.5 text-[12.5px]" style={{ color: 'var(--ag-ink)' }}>
-                        <span className="absolute -left-6 top-[3px] w-3.5 h-3.5 rounded-full border-[3px]" style={{ background: step.done ? 'var(--ag-g)' : step.cur ? 'var(--ag-y)' : 'var(--ag-line)', borderColor: step.done ? 'var(--ag-g)' : step.cur ? '#f2b70533' : 'var(--ag-line)', boxShadow: step.cur ? '0 0 0 4px #f2b70533' : 'none' }} />
-                        {step.t}<br /><span className="text-[12px]" style={{ color: 'var(--ag-mut)' }}>{step.s}</span>
-                        {i < arr.length - 1 && <span className="absolute -left-[19px] top-4 bottom-0 w-0.5" style={{ background: step.done ? 'var(--ag-g)' : 'var(--ag-line)' }} />}
-                      </div>
-                    ))}
-                  </div>
-                </FarmerCard>
+            <div>
+              <h2 className="text-[17px] font-semibold mt-5">My applications</h2>
+              <div className="mt-2">
+                <ApplicationTracker apps={apps} />
               </div>
-            )}
+            </div>
             <div>
               <h2 className="text-[17px] font-semibold mt-5">Digital certificate</h2>
               <div className="rounded-[20px] p-4 flex gap-3.5 items-center text-white mt-2" style={{ background: 'linear-gradient(135deg,#0f4a37,#1a63a8)' }}>
@@ -160,28 +132,8 @@ export default function Services() {
 
         <div className="grid mt-6" style={{ gridTemplateColumns: '1.65fr 1fr', gap: 20 }}>
           <DCard>
-            <DSectionHead title="Track application" right={inReviewApp ? <DChip text={inReviewApp.status.replace(/_/g, ' ')} variant={dChipVar(inReviewApp.status)} /> : null} />
-            {inReviewApp ? (
-              <>
-                <b className="font-jk text-[14px]" style={{ color: 'var(--ac-ink)' }}>{inReviewApp.service_type}</b>
-                <div className="text-[12px] font-jk" style={{ color: 'var(--ac-mu)' }}>{inReviewApp.reference} · Submitted {inReviewApp.submitted_date}</div>
-                <div className="relative pl-7 mt-4">
-                  {[
-                    { t: 'Submitted', s: 'Auto-confirmed', st: 'done' },
-                    { t: 'Vaccination & zone check passed', s: 'Auto-checked', st: 'done' },
-                    { t: 'Reviewed by ' + (inReviewApp.assigned_officer || 'Officer'), s: `Due by ${inReviewApp.due_date} (5-day SLA)`, st: 'cur' },
-                    { t: 'Permit issued with QR code', s: '', st: '' },
-                  ].map((step, i, arr) => (
-                    <div key={i} className="relative pb-4 text-[12.5px] font-jk" style={{ color: 'var(--ac-ink)' }}>
-                      <span className="absolute -left-7 top-[3px] w-3.5 h-3.5 rounded-full border-[3px]"
-                        style={{ background: step.st === 'done' ? 'var(--ac-g)' : step.st === 'cur' ? 'var(--ac-au)' : 'var(--ac-ln)', borderColor: step.st === 'done' ? 'var(--ac-g)' : step.st === 'cur' ? '#c9a24b33' : 'var(--ac-ln)', boxShadow: step.st === 'cur' ? '0 0 0 4px #c9a24b33' : 'none' }} />
-                      {step.t}<br /><span style={{ color: 'var(--ac-mu)' }}>{step.s}</span>
-                      {i < arr.length - 1 && <span className="absolute -left-[22px] top-4 bottom-0 w-0.5" style={{ background: step.st === 'done' ? 'var(--ac-g)' : 'var(--ac-ln)' }} />}
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : <div className="py-6 text-center text-[13px] font-jk" style={{ color: 'var(--ac-mu)' }}>No applications to track yet.</div>}
+            <DSectionHead title="My applications" />
+            <ApplicationTracker apps={apps} desktop />
           </DCard>
 
           <DCard className="relative overflow-hidden" style={{ border: 0, background: 'radial-gradient(100% 120% at 100% 0, #c9a24b55, transparent 55%), linear-gradient(135deg,#0b3326,#14507c)' }}>

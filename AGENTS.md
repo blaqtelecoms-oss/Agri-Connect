@@ -32,6 +32,10 @@ npx skills add base44/skills
 - Prefer the existing Base44 CLI workflow over adding new npm scripts for Base44-specific tasks.
 - Reuse the existing SDK client and Vite plugin patterns before adding new Base44 integration paths.
 - Run the relevant checks from `package.json` before finishing code changes.
+- Fixed overlays must render through a portal on `document.body` (see
+  `src/pages/farmer/ServiceApplyForm.jsx`): animated page wrappers such as the
+  desktop `ac-rise` content area act as the containing block for `fixed`
+  children, which shifts dialogs off-center instead of viewport-anchoring them.
 
 ## Base44 sandbox environment (docker compose)
 
