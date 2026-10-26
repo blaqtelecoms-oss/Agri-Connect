@@ -109,7 +109,10 @@ export default function AdminLayout() {
               <Bell className="w-4 h-4" style={{ color: 'var(--ag-ink)' }} />
               <span className="absolute top-2 right-2.5 w-1.5 h-1.5 rounded-full" style={{ background: 'var(--ag-or)' }} />
             </button>
-            <div className="w-9 h-9 rounded-full grid place-items-center text-white font-semibold text-[12px]" style={{ background: 'linear-gradient(135deg,#2f6f5a,#e2471b)' }} title={`${DEMO_OFFICIAL.name} · ${DEMO_OFFICIAL.role}`}>{DEMO_OFFICIAL.initials}</div>
+            <button onClick={() => navigate('/admin/profile')} aria-label="Open profile"
+              className={`w-9 h-9 rounded-full grid place-items-center text-white font-semibold text-[12px] transition ${isActive('/admin/profile') ? 'outline outline-2 outline-offset-2' : 'hover:opacity-85'}`}
+              style={{ background: 'linear-gradient(135deg,#2f6f5a,#e2471b)', outlineColor: 'var(--ag-or)' }}
+              title={`${DEMO_OFFICIAL.name} · ${DEMO_OFFICIAL.role}`}>{DEMO_OFFICIAL.initials}</button>
           </div>
         </header>
 

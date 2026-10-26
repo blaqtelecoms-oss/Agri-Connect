@@ -30,6 +30,7 @@ import Communications from '@/pages/admin/Communications';
 import Reports from '@/pages/admin/Reports';
 import Administration from '@/pages/admin/Administration';
 import FarmersMap from '@/pages/admin/FarmersMap';
+import AdminProfile from '@/pages/admin/Profile';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -81,6 +82,7 @@ const AuthenticatedApp = () => {
           <Route path="reports" element={<Reports />} />
           <Route path="administration" element={<Administration />} />
           <Route path="map" element={<FarmersMap />} />
+          <Route path="profile" element={<AdminProfile />} />
         </Route>
       </Route>
 
