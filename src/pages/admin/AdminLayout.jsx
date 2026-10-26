@@ -54,7 +54,7 @@ export default function AdminLayout() {
         {/* Header */}
         <header className="flex items-center gap-5 px-5 py-3.5 z-10 flex-wrap">
           <div className="flex items-center gap-2.5 whitespace-nowrap">
-            <img src={LOGO_URL} alt="Emfuleni" className="h-10 bg-white rounded-[10px] p-0.5" />
+            <img src={LOGO_URL} alt="Emfuleni" className="h-12 lg:h-14 bg-white rounded-[10px] p-1" />
             <div className="text-[20px] font-medium tracking-tight" style={{ color: 'var(--ag-ink)' }}>
               Agri Connect
               <small className="block text-[10px] font-normal" style={{ color: 'var(--ag-mut)' }}>Emfuleni Local Municipality · Agriculture</small>
