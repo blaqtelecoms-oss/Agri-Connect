@@ -1,0 +1,46 @@
+{
+  "name": "Farm",
+  "type": "object",
+  "properties": {
+    "farmer_id": {
+      "type": "string"
+    },
+    "farmer_name": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "suburb": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "size_ha": {
+      "type": "number"
+    },
+    "tenure": {
+      "type": "string",
+      "enum": [
+        "owned",
+        "leased",
+        "communal",
+        "land_reform"
+      ]
+    },
+    "water_source": {
+      "type": "string"
+    },
+    "primary_commodities": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "farmer_id"
+  ]
+}

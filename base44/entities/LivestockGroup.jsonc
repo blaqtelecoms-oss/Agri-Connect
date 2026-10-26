@@ -1,0 +1,25 @@
+{
+  "name": "LivestockGroup",
+  "type": "object",
+  "properties": {
+    "farm_id": {
+      "type": "string"
+    },
+    "species": {
+      "type": "string"
+    },
+    "count": {
+      "type": "number"
+    },
+    "tags_or_brands": {
+      "type": "string"
+    },
+    "vaccination_status": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "species",
+    "farm_id"
+  ]
+}

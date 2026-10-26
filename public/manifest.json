@@ -1,0 +1,13 @@
+{
+  "name": "Agri-Connect",
+  "short_name": "Agri-Connect",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "https://media.base44.com/images/public/6adb62f186648468699f5ec8/cd4d619e6_generated_30aca934.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

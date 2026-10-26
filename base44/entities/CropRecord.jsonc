@@ -1,0 +1,28 @@
+{
+  "name": "CropRecord",
+  "type": "object",
+  "properties": {
+    "farm_id": {
+      "type": "string"
+    },
+    "crop_type": {
+      "type": "string"
+    },
+    "hectares": {
+      "type": "number"
+    },
+    "season": {
+      "type": "string"
+    },
+    "expected_yield": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "crop_type",
+    "farm_id"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "name": "NotificationItem",
+  "type": "object",
+  "properties": {
+    "farmer_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "alert",
+        "message",
+        "action",
+        "visit",
+        "notice"
+      ],
+      "default": "message"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "push",
+        "sms",
+        "whatsapp",
+        "email"
+      ],
+      "default": "push"
+    },
+    "audience": {
+      "type": "string",
+      "default": "farmer"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    },
+    "delivery_status": {
+      "type": "string",
+      "default": "sent"
+    }
+  },
+  "required": [
+    "title",
+    "farmer_id"
+  ]
+}

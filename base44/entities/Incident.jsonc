@@ -1,0 +1,76 @@
+{
+  "name": "Incident",
+  "type": "object",
+  "properties": {
+    "reference": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "animal_disease",
+        "plant_pest",
+        "stock_theft",
+        "disaster"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "farmer_id": {
+      "type": "string"
+    },
+    "farmer_name": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "quantity_affected": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "moderate",
+        "warning",
+        "high",
+        "critical",
+        "pending"
+      ],
+      "default": "warning"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "investigating",
+        "confirmed",
+        "cleared",
+        "closed"
+      ],
+      "default": "submitted"
+    },
+    "assigned_officer": {
+      "type": "string"
+    },
+    "advice": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "reference",
+    "type",
+    "farmer_id"
+  ]
+}

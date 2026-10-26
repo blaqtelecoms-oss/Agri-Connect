@@ -1,0 +1,35 @@
+{
+  "name": "GrantApplication",
+  "type": "object",
+  "properties": {
+    "applicant": {
+      "type": "string"
+    },
+    "farmer_id": {
+      "type": "string"
+    },
+    "programme": {
+      "type": "string"
+    },
+    "score": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in_review",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "milestone": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "applicant",
+    "programme"
+  ]
+}

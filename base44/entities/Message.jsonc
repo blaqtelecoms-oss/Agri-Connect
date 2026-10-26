@@ -1,0 +1,30 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "audience": {
+      "type": "string"
+    },
+    "channels": {
+      "type": "string"
+    },
+    "delivered_percent": {
+      "type": "number"
+    },
+    "read_percent": {
+      "type": "number"
+    },
+    "sent_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Programme",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "budget": {
+      "type": "string"
+    },
+    "budget_value": {
+      "type": "number"
+    },
+    "committed_percent": {
+      "type": "number"
+    },
+    "window": {
+      "type": "string"
+    },
+    "criteria": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "opens_soon",
+        "active",
+        "closed"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

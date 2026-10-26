@@ -1,0 +1,42 @@
+{
+  "name": "ControlZone",
+  "type": "object",
+  "properties": {
+    "disease": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string"
+    },
+    "centre_lat": {
+      "type": "number"
+    },
+    "centre_lng": {
+      "type": "number"
+    },
+    "radius_km": {
+      "type": "number"
+    },
+    "restrictions": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string"
+    },
+    "end_date": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "lifted"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "disease",
+    "area"
+  ]
+}
