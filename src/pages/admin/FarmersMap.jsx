@@ -52,11 +52,11 @@ function MapFocus({ selected, points }) {
 }
 
 export default function FarmersMap() {
-  const { items: farmers } = useEntityList('Farmer', {}, '-created_date', 500);
-  const { items: farms } = useEntityList('Farm', {}, '-created_date', 500);
+  const { items: farmers, sample: farmersSample } = useEntityList('Farmer', {}, '-created_date', 500);
+  const { items: farms, sample: farmsSample } = useEntityList('Farm', {}, '-created_date', 500);
   const [selected, setSelected] = useState(null);
 
-  const live = farmers.length > 0 || farms.length > 0;
+  const live = (farmers.length > 0 && !farmersSample) || (farms.length > 0 && !farmsSample);
   const points = React.useMemo(() => {
     if (!live) return SAMPLE_POINTS;
     return farms

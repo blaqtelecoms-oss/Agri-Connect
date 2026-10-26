@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
+import { sampleList } from './_adminSampleData';
 
 // Toast helper for admin pages — writes through the global set in AdminLayout.
 export function adminToast(msg) {
@@ -8,19 +9,25 @@ export function adminToast(msg) {
 
 export function useEntityList(entity, query = {}, sort = '-created_date', limit = 50) {
   const [items, setItems] = useState([]);
+  const [sample, setSample] = useState(false);
   const [loading, setLoading] = useState(true);
   const reload = useCallback(async () => {
     try {
       const page = await base44.entities[entity].filter(query, { sort, limit });
       setItems(Array.isArray(page) ? page : page.items);
+      setSample(false);
     } catch (e) {
       console.error(entity, e);
+      // Backend unreachable (not configured): serve sample rows so officer
+      // pages still populate. Live data always wins once a backend responds.
+      setItems(sampleList(entity, query, sort, limit));
+      setSample(true);
     } finally {
       setLoading(false);
     }
   }, [entity, JSON.stringify(query), sort, limit]);
   useEffect(() => { reload(); }, [reload]);
-  return { items, loading, reload };
+  return { items, loading, reload, sample };
 }
 
 export function useCounts(queryObj) {
