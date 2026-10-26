@@ -50,11 +50,16 @@ municipal portals are reachable without a backend.
 
 What needs the backend:
 
-- `src/pages/admin/_admin.jsx` — `useEntityList`, `useCounts` (admin tables, counters).
-- `src/pages/farmer/_shared.jsx` — farms, applications, service types, notifications, incidents.
-- `src/pages/farmer/Report.jsx` and `src/pages/farmer/Services.jsx` — entity `create` calls.
-  These have no `catch`, so without a backend a submit silently does nothing (no
-  success screen, no visible error).
+- `src/pages/admin/_admin.jsx` — `useCounts` (admin counters). List queries fall
+  back to sample rows in `src/pages/admin/_adminSampleData.js`.
+- `src/pages/farmer/_shared.jsx` — list queries (farms, applications, service
+  types, notifications, incidents) fall back to sample rows in
+  `src/pages/farmer/_farmerSampleData.js` when the backend is unreachable.
+- `src/pages/farmer/Services.jsx` — `apply` records the submission in the local
+  sample fallback (`addSampleApplication`/`addSampleNotification`) when the
+  entity `create` fails, so the apply flow works end to end without a backend.
+- `src/pages/farmer/Report.jsx` — incident `create` has no `catch`, so without a
+  backend a submit silently does nothing (no success screen, no visible error).
 
 Running with a backend (from inside the container):
 

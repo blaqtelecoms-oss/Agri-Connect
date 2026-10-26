@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, FileText } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { addSampleApplication, addSampleNotification } from './_farmerSampleData';
 import { qrSvgFromToken } from '@/lib/agriAssets';
 import { FARMER_NAME, FARMER_ID, useServiceTypes, useFarmerApplications, Chip, FarmerCard, PageWrap, PageHeader, showToast, DCard, DSectionHead, DChip } from './_shared';
 
@@ -34,14 +35,24 @@ export default function Services() {
     setSubmitting(s.id);
     try {
       const ref = 'APP-2026-' + String(Math.floor(4000 + Math.random() * 999)).padStart(4, '0');
-      await base44.entities.Application.create({
+      const app = {
         reference: ref, service_type: s.name, category: s.category, farmer_id: FARMER_ID, farmer_name: FARMER_NAME,
         area: 'De Deur', status: 'submitted', assigned_officer: s.approver_role || 'Officer', due_date: '5 days',
         submitted_date: new Date().toLocaleDateString('en-ZA', { day: '2-digit', month: 'short' }), progress: 5, submitted_data: 'Pre-filled from farm profile',
-      });
-      await base44.entities.NotificationItem.create({
-        farmer_id: FARMER_ID, title: 'Application submitted', body: `${s.name} (${ref}) is now in review. We will notify you of updates.`, type: 'action', channel: 'push',
-      });
+      };
+      try {
+        await base44.entities.Application.create(app);
+        await base44.entities.NotificationItem.create({
+          farmer_id: FARMER_ID, title: 'Application submitted', body: `${s.name} (${ref}) is now in review. We will notify you of updates.`, type: 'action', channel: 'push',
+        });
+      } catch (e) {
+        // Backend unreachable (not configured): record the submission in the
+        // local sample fallback so the apply flow still works end to end.
+        addSampleApplication(app);
+        addSampleNotification({
+          farmer_id: FARMER_ID, title: 'Application submitted', body: `${s.name} (${ref}) is now in review. We will notify you of updates.`, type: 'action', channel: 'push',
+        });
+      }
       showToast('Application submitted – ' + ref);
       reload();
     } finally {

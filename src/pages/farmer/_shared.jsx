@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
+import { sampleList } from './_farmerSampleData';
 
 // Shared farmer-side data hooks. The demo farmer identity is fixed to
 // Thabo Mokoena (FRM-EMF-00231) so the portal reads live entity records.
@@ -34,6 +35,10 @@ export function useFarmerFarms() {
       const page = await base44.entities.Farm.filter({ farmer_id: FARMER_ID });
       const items = Array.isArray(page) ? page : page.items;
       setFarms(items);
+    } catch (e) {
+      // Backend unreachable (not configured): serve sample rows so farmer
+      // pages still populate. Live data always wins once a backend responds.
+      setFarms(sampleList('Farm', { farmer_id: FARMER_ID }));
     } finally { setLoading(false); }
   }, []);
   useEffect(() => { load(); }, [load]);
@@ -48,6 +53,10 @@ export function useFarmerApplications() {
       const page = await base44.entities.Application.filter({ farmer_id: FARMER_ID }, { sort: '-created_date' });
       const items = Array.isArray(page) ? page : page.items;
       setItems(items);
+    } catch (e) {
+      // Backend unreachable (not configured): serve sample rows so farmer
+      // pages still populate. Live data always wins once a backend responds.
+      setItems(sampleList('Application', { farmer_id: FARMER_ID }));
     } finally { setLoading(false); }
   }, []);
   useEffect(() => { load(); }, [load]);
@@ -62,6 +71,10 @@ export function useServiceTypes() {
       const page = await base44.entities.ServiceType.filter({}, { sort: 'sort_order' });
       const items = Array.isArray(page) ? page : page.items;
       setItems(items);
+    } catch (e) {
+      // Backend unreachable (not configured): serve sample rows so farmer
+      // pages still populate. Live data always wins once a backend responds.
+      setItems(sampleList('ServiceType'));
     } finally { setLoading(false); }
   }, []);
   useEffect(() => { load(); }, [load]);
@@ -76,6 +89,10 @@ export function useFarmerNotifications() {
       const page = await base44.entities.NotificationItem.filter({ farmer_id: FARMER_ID }, { sort: '-created_date' });
       const items = Array.isArray(page) ? page : page.items;
       setItems(items);
+    } catch (e) {
+      // Backend unreachable (not configured): serve sample rows so farmer
+      // pages still populate. Live data always wins once a backend responds.
+      setItems(sampleList('NotificationItem', { farmer_id: FARMER_ID }));
     } finally { setLoading(false); }
   }, []);
   useEffect(() => { reload(); }, [reload]);
