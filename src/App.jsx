@@ -29,6 +29,7 @@ import Grants from '@/pages/admin/Grants';
 import Communications from '@/pages/admin/Communications';
 import Reports from '@/pages/admin/Reports';
 import Administration from '@/pages/admin/Administration';
+import FarmersMap from '@/pages/admin/FarmersMap';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -79,6 +80,7 @@ const AuthenticatedApp = () => {
           <Route path="communications" element={<Communications />} />
           <Route path="reports" element={<Reports />} />
           <Route path="administration" element={<Administration />} />
+          <Route path="map" element={<FarmersMap />} />
         </Route>
       </Route>
 
