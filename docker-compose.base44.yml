@@ -17,6 +17,9 @@ services:
           touch node_modules/.base44-installed
         fi
         exec npm run dev -- --host 0.0.0.0 --port 3000 --strictPort
+    env_file:
+      # Platform-delivered secrets (Base44 app id + backend URL). Last so it wins.
+      - /run/base44/app.env
     ports:
       - "3000:3000"
     environment:
