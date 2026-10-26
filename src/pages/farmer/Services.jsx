@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Search, ArrowRight } from 'lucide-react';
-import { qrSvgFromToken } from '@/lib/agriAssets';
 import ServiceApplyForm, { CATEGORY_META } from './ServiceApplyForm';
 import ApplicationTracker from './ApplicationTracker';
-import { FARMER_NAME, FARMER_ID, useServiceTypes, useFarmerApplications, PageWrap, PageHeader, DCard, DSectionHead } from './_shared';
+import { useServiceTypes, useFarmerApplications, PageWrap, PageHeader, DCard, DSectionHead } from './_shared';
 
 const CATS = ['All', 'Permits', 'Registrations', 'Grants', 'Certificates', 'Training'];
 const catKey = { Permits: 'permit', Registrations: 'registration', Grants: 'grant', Certificates: 'certificate', Training: 'training' };
@@ -20,8 +19,6 @@ export default function Services() {
     const qOk = !query || s.name.toLowerCase().includes(query.toLowerCase());
     return catOk && qOk;
   });
-
-  const qrToken = FARMER_ID + '-CERT';
 
   return (
     <>
@@ -73,23 +70,10 @@ export default function Services() {
               );
             })}
           </div>
-          <div className="grid grid-cols-1 gap-0">
-            <div>
-              <h2 className="text-[17px] font-semibold mt-5">My applications</h2>
-              <div className="mt-2">
-                <ApplicationTracker apps={apps} />
-              </div>
-            </div>
-            <div>
-              <h2 className="text-[17px] font-semibold mt-5">Digital certificate</h2>
-              <div className="rounded-[20px] p-4 flex gap-3.5 items-center text-white mt-2" style={{ background: 'linear-gradient(135deg,#0f4a37,#1a63a8)' }}>
-                <div className="w-[74px] h-[74px] bg-white rounded-[10px] p-1.5 flex-none" dangerouslySetInnerHTML={{ __html: qrSvgFromToken(qrToken) }} />
-                <div>
-                  <div className="text-[11px] opacity-80">Registered Farmer Certificate</div>
-                  <b className="text-[15px]">{FARMER_NAME}</b>
-                  <div className="text-[11px] opacity-85">{FARMER_ID} · Valid to Oct 2027<br />Scan to verify authenticity</div>
-                </div>
-              </div>
+          <div>
+            <h2 className="text-[17px] font-semibold mt-5">My applications</h2>
+            <div className="mt-2">
+              <ApplicationTracker apps={apps} />
             </div>
           </div>
         </PageWrap>
@@ -130,23 +114,10 @@ export default function Services() {
           })}
         </div>
 
-        <div className="grid mt-6" style={{ gridTemplateColumns: '1.65fr 1fr', gap: 20 }}>
-          <DCard>
-            <DSectionHead title="My applications" />
-            <ApplicationTracker apps={apps} desktop />
-          </DCard>
-
-          <DCard className="relative overflow-hidden" style={{ border: 0, background: 'radial-gradient(100% 120% at 100% 0, #c9a24b55, transparent 55%), linear-gradient(135deg,#0b3326,#14507c)' }}>
-            <span className="text-[11px] tracking-[1.4px] opacity-80 font-jk">DIGITAL CERTIFICATE</span>
-            <div className="flex gap-4 items-center mt-3">
-              <div className="w-[84px] h-[84px] bg-white rounded-xl p-1.5 flex-none" dangerouslySetInnerHTML={{ __html: qrSvgFromToken(qrToken) }} />
-              <div className="text-white">
-                <b className="font-fraunces block" style={{ fontSize: 20, fontWeight: 500 }}>Registered Farmer</b>
-                <div className="text-[12px] opacity-85 font-jk mt-0.5">Scan to verify authenticity</div>
-              </div>
-            </div>
-          </DCard>
-        </div>
+        <DCard className="mt-6">
+          <DSectionHead title="My applications" />
+          <ApplicationTracker apps={apps} desktop />
+        </DCard>
       </div>
 
       {/* Professional application flow for the selected service */}

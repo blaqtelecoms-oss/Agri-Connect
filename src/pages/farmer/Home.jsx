@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Sun, Droplet, Bell, TriangleAlert, FileText, LifeBuoy, Leaf, Clock, Calendar, Shield, ArrowUpRight, Phone, MapPin } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { HERO_FARMER } from '@/lib/agriAssets';
-import { qrSvgFromToken } from '@/lib/agriAssets';
+import CertificateCard from './CertificateCard';
 import { FARMER_NAME, FARMER_ID, useFarmerApplications, Chip, FarmerCard, PageWrap, PageHeader, initials, useToastBus, DCard, DSectionHead, DLink, DChip, DIconTile, Sparkline, Progress } from './_shared';
 
 const FARMS = {
@@ -126,6 +126,11 @@ export default function FarmerHome() {
                 </div>
               ))}
             </FarmerCard>
+          </div>
+
+          <div className="mt-5">
+            <h2 className="text-[17px] font-semibold">Digital certificate</h2>
+            <div className="mt-2"><CertificateCard /></div>
           </div>
         </PageWrap>
       </div>
@@ -307,16 +312,7 @@ export default function FarmerHome() {
             </DCard>
 
             {/* Certificate */}
-            <DCard className="relative overflow-hidden" style={{ border: 0, background: 'radial-gradient(100% 120% at 100% 0, #c9a24b55, transparent 55%), linear-gradient(135deg,#0b3326,#14507c)' }}>
-              <span className="text-[11px] tracking-[1.4px] opacity-80 font-jk">DIGITAL CERTIFICATE</span>
-              <div className="flex gap-4 items-center mt-3">
-                <div className="w-[84px] h-[84px] bg-white rounded-xl p-1.5 flex-none" dangerouslySetInnerHTML={{ __html: qrSvgFromToken(FARMER_ID) }} />
-                <div className="text-white">
-                  <b className="font-fraunces block" style={{ fontSize: 20, fontWeight: 500 }}>Registered Farmer</b>
-                  <div className="text-[12px] opacity-85 font-jk mt-0.5">{FARMER_NAME}<br />{FARMER_ID} · Valid to Oct 2027</div>
-                </div>
-              </div>
-            </DCard>
+            <CertificateCard desktop />
 
             {/* Forecast */}
             <DCard>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ShieldCheck, LogOut } from 'lucide-react';
 import { clearSession, DEMO_FARMER } from '@/lib/agriAuth';
 import { FarmerCard, PageWrap, PageHeader, initials, DCard, DSectionHead } from './_shared';
+import CertificateCard from './CertificateCard';
 
 const TOGGLES = [
   { k: 'push', label: 'Push notifications' },
@@ -29,6 +30,8 @@ export default function Profile() {
             <b style={{ color: 'var(--ag-ink)' }}>{DEMO_FARMER.name}</b>
             <div className="text-[12px]" style={{ color: 'var(--ag-mut)' }}>{DEMO_FARMER.farmer_id} · Smallholder farmer · {DEMO_FARMER.area}</div>
           </FarmerCard>
+          <h2 className="text-[17px] font-semibold mt-5">Digital certificate</h2>
+          <div className="mt-2"><CertificateCard /></div>
           <h2 className="text-[17px] font-semibold mt-5">Notifications</h2>
           <FarmerCard className="mt-2">
             {TOGGLES.map(item => (
@@ -75,6 +78,7 @@ export default function Profile() {
           </div>
 
           <div className="flex flex-col gap-5 min-w-0">
+            <CertificateCard desktop />
             <DCard>
               <DSectionHead title="Privacy" />
               <div className="flex items-center gap-3 py-2">
